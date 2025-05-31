@@ -1,10 +1,13 @@
 .guest-dashboard {
   font-family: 'Poppins', sans-serif;
   text-align: center;
-  padding: 20px;
   background-color: #fefae0;
   color: #606c38;
   min-height: 100vh;
+  max-width: 1200px; 
+  width: 100%;
+  margin: auto; 
+  box-sizing: border-box;
 }
 
 .dashboard-header {
