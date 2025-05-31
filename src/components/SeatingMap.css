@@ -1,0 +1,15 @@
+.seating-map {
+  text-align: center;
+  padding: 20px;
+  background-color: #fefae0;
+  color: #606c38;
+}
+
+.seating-message {
+  font-size: 18px;
+  color: #606c38;
+}
+
+.seating-message.error {
+  color: red;
+}

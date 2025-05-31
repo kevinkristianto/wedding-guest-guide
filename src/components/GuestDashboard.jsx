@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './GuestDashboard.css';
 import MenuDisplay from './MenuDisplay';
+import SeatingMap from './SeatingMap'; // Import the SeatingMap component
+import logo from '../assets/images/wedding_logo_fefae0.svg'; // Import the logo
 import axios from 'axios';
 
 const GuestDashboard = () => {
@@ -48,11 +50,7 @@ const GuestDashboard = () => {
         />
       );
     } else if (activeTab === 'Seating Plan') {
-      return (
-        <p className="dashboard-message">
-          Seating Plan content will appear here.
-        </p>
-      );
+      return <SeatingMap guestToken={guestToken} />;
     }
 
     return (
@@ -65,18 +63,21 @@ const GuestDashboard = () => {
   return (
     <div className="guest-dashboard">
       <header className="dashboard-header">
-        <button
-          className={`dashboard-tab ${activeTab === 'Menu' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Menu')}
-        >
-          Menu
-        </button>
-        <button
-          className={`dashboard-tab ${activeTab === 'Seating Plan' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Seating Plan')}
-        >
-          Seating Plan
-        </button>
+        <img alt="Wedding Logo" className="app-header-logo" src={logo} />
+        <div className="header-buttons">
+          <button
+            className={`dashboard-tab ${activeTab === 'Menu' ? 'active' : ''}`}
+            onClick={() => setActiveTab('Menu')}
+          >
+            Menu
+          </button>
+          <button
+            className={`dashboard-tab ${activeTab === 'Seating Plan' ? 'active' : ''}`}
+            onClick={() => setActiveTab('Seating Plan')}
+          >
+            Seating Plan
+          </button>
+        </div>
       </header>
       <div className="dashboard-content">{renderContent()}</div>
     </div>

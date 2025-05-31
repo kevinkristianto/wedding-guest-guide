@@ -17,13 +17,13 @@ body {
 
 .guest-header h1 {
   font-size: 2rem;
-  color: #283618;
+  color: #fefae0;
   margin-bottom: 10px;
 }
 
 .guest-header p {
   font-size: 1.2rem;
-  color: #606c38;
+  color: #fefae0;
 }
 
 .guest-container {
@@ -121,4 +121,11 @@ body {
 .suggestions li:hover {
   background-color: #dda15e;
   color: #283618;
+}
+
+.app-body-logo {
+  height: 100px;
+  width: auto;
+  cursor: pointer;
+  display: block;
 }
