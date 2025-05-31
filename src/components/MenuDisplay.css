@@ -1,0 +1,50 @@
+.menu-display {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 20px;
+  background-color: #fefae0;
+  color: #606c38;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.menu-display h2 {
+  font-size: 24px;
+  color: #283618;
+  margin-bottom: 20px;
+}
+
+.menu-details p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #606c38;
+}
+
+.allergy-section {
+  margin-top: 20px;
+}
+
+.allergy-section h3 {
+  font-size: 20px;
+  color: #283618;
+  margin-bottom: 10px;
+}
+
+.allergy-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.allergy-section li {
+  font-size: 16px;
+  color: #606c38;
+  margin-bottom: 5px;
+}
+
+.allergy-note {
+  font-size: 14px;
+  color: #606c38;
+  margin-top: 10px;
+}
