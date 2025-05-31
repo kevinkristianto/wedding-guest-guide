@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CanvasWrapper from './CanvasWrapper.jsx'; 
+import CanvasWrapper from './CanvasWrapper.jsx';
 import './SeatingMap.css';
 
 const SeatingMap = ({ guestToken }) => {
@@ -24,7 +24,9 @@ const SeatingMap = ({ guestToken }) => {
         );
 
         if (Array.isArray(layoutRes.data) && layoutRes.data.length > 1) {
-          throw new Error('There are more than 1 layouts, please delete the unused one');
+          throw new Error(
+            'There are more than 1 layouts, please delete the unused one'
+          );
         }
 
         const guestElement = layoutRes.data.elements.find(
@@ -41,7 +43,10 @@ const SeatingMap = ({ guestToken }) => {
         setLoading(false);
       } catch (err) {
         console.error('Failed to fetch seat information:', err);
-        setError(err.message || 'Failed to load seat information. Please try again later.');
+        setError(
+          err.message ||
+            'Failed to load seat information. Please try again later.'
+        );
         setLoading(false);
       }
     };
