@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './CanvasWrapper.css';
 
-const CanvasWrapper = ({ children, onTransformChange }) => {
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [contentPosition, setContentPosition] = useState({ x: 0, y: 0 });
+const CanvasWrapper = ({ children, onTransformChange, initialTransform }) => {
+  const [zoomLevel, setZoomLevel] = useState(initialTransform?.zoomLevel || 1);
+  const [contentPosition, setContentPosition] = useState(initialTransform?.contentPosition || { x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const contentRef = useRef(null);
@@ -13,6 +13,13 @@ const CanvasWrapper = ({ children, onTransformChange }) => {
       onTransformChange({ zoomLevel, contentPosition });
     }
   }, [zoomLevel, contentPosition, onTransformChange]);
+
+  useEffect(() => {
+    if (initialTransform) {
+      setZoomLevel(initialTransform.zoomLevel || 1);
+      setContentPosition(initialTransform.contentPosition || { x: 0, y: 0 });
+    }
+  }, [initialTransform]);
 
   const handleMouseDown = (e) => {
     setIsPanning(true);

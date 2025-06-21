@@ -3,7 +3,7 @@
   text-align: center;
   padding: 20px;
   background-color: #fefae0;
-  color: #606c38;
+  color: #550000;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
@@ -12,14 +12,14 @@
 
 .menu-display h2 {
   font-size: 24px;
-  color: #283618;
+  color: #300000;
   margin-bottom: 20px;
 }
 
 .menu-details p {
   font-size: 18px;
   margin: 10px 0;
-  color: #606c38;
+  color: #550000;
 }
 
 .allergy-section {
@@ -28,7 +28,7 @@
 
 .allergy-section h3 {
   font-size: 20px;
-  color: #283618;
+  color: #300000;
   margin-bottom: 10px;
 }
 
@@ -39,12 +39,12 @@
 
 .allergy-section li {
   font-size: 16px;
-  color: #606c38;
+  color: #550000;
   margin-bottom: 5px;
 }
 
 .allergy-note {
   font-size: 14px;
-  color: #606c38;
+  color: #550000;
   margin-top: 10px;
 }

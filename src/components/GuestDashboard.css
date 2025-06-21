@@ -1,8 +1,8 @@
 .guest-dashboard {
   font-family: 'Poppins', sans-serif;
   text-align: center;
-  background-color: #fefae0;
-  color: #606c38;
+  background-color: #550000;
+  color: #550000;
   min-height: 100vh;
   max-width: 1200px;
   width: 100%;
@@ -16,7 +16,7 @@
   justify-content: space-between;
   padding: 10px;
   width: 100%;
-  background-color: #606c38;
+  background-color: #550000;
   box-sizing: border-box;
 }
 
@@ -37,11 +37,12 @@
 
 .dashboard-content {
   margin-top: 20px;
+  color:#550000;
 }
 
 .dashboard-message {
   font-size: 18px;
-  color: #606c38;
+  color: #fefae0;
 }
 
 .app-header-logo {

@@ -7,46 +7,38 @@ const SeatingMap = ({ guestToken }) => {
   const [seatName, setSeatName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [elements, setElements] = useState([]); // Holds layout elements
+  const [elements, setElements] = useState([]);
+  const [canvasTransform, setCanvasTransform] = useState({ zoomLevel: 1, contentPosition: { x: 0, y: 0 } });
+  const [guestSeatId, setGuestSeatId] = useState(null);
 
   useEffect(() => {
     const fetchSeatInfo = async () => {
       try {
-        const guestRes = await axios.get(
-          `http://localhost:5000/api/guests/token/${guestToken}`
-        );
+        const guestRes = await axios.get(`http://localhost:5000/api/guests/token/${guestToken}`);
         const guestName = guestRes.data.name;
 
-        const layoutName = 'showcase-1'; // Hardcoded layout name
+        const layoutName = 'showcase-1';
 
-        const layoutRes = await axios.get(
-          `http://localhost:5000/api/layouts/${layoutName}`
-        );
+        const layoutRes = await axios.get(`http://localhost:5000/api/layouts/${layoutName}`);
 
         if (Array.isArray(layoutRes.data) && layoutRes.data.length > 1) {
-          throw new Error(
-            'There are more than 1 layouts, please delete the unused one'
-          );
+          throw new Error('There are more than 1 layouts, please delete the unused one');
         }
 
-        const guestElement = layoutRes.data.elements.find(
-          (el) => el.guest === guestName
-        );
+        const guestElement = layoutRes.data.elements.find((el) => el.guest === guestName);
 
         if (guestElement) {
           setSeatName(guestElement.name || 'Not assigned');
+          setGuestSeatId(guestElement.id);
+          focusCanvasOnSeat(guestElement);
         } else {
           setSeatName('Not assigned');
         }
 
-        setElements(layoutRes.data.elements || []); // Store layout elements
+        setElements(layoutRes.data.elements || []);
         setLoading(false);
       } catch (err) {
-        console.error('Failed to fetch seat information:', err);
-        setError(
-          err.message ||
-            'Failed to load seat information. Please try again later.'
-        );
+        setError(err.message || 'Failed to load seat information. Please try again later.');
         setLoading(false);
       }
     };
@@ -55,6 +47,19 @@ const SeatingMap = ({ guestToken }) => {
       fetchSeatInfo();
     }
   }, [guestToken]);
+
+  const focusCanvasOnSeat = (seatElement) => {
+    const canvasWidth = 800;
+    const canvasHeight = 600;
+
+    const seatCenterX = seatElement.x + seatElement.width / 2;
+    const seatCenterY = seatElement.y + seatElement.height / 2;
+
+    const offsetX = canvasWidth / 2 - seatCenterX;
+    const offsetY = canvasHeight / 2 - seatCenterY;
+
+    setCanvasTransform({ zoomLevel: 1, contentPosition: { x: offsetX, y: offsetY } });
+  };
 
   if (loading) {
     return <p className="seating-message">Loading seat information...</p>;
@@ -69,7 +74,7 @@ const SeatingMap = ({ guestToken }) => {
       <div className="seating-name-display">
         <p>Your seat number is {seatName}</p>
       </div>
-      <CanvasWrapper>
+      <CanvasWrapper initialTransform={canvasTransform} onTransformChange={setCanvasTransform}>
         {elements.map((el) => (
           <div
             key={el.id}
@@ -80,13 +85,13 @@ const SeatingMap = ({ guestToken }) => {
               top: `${el.y}px`,
               width: `${el.width}px`,
               height: `${el.height}px`,
-              backgroundColor: el.type === 'table' ? '#606c38' : '#fefae0',
-              border: el.type === 'chair' ? '1px solid #606c38' : 'none',
+              backgroundColor: el.id === guestSeatId ? '#ffcc00' : el.type === 'table' ? '#606c38' : '#fefae0',
+              border: el.type === 'chair' ? '2px solid #606c38' : 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '12px',
-              color: '#606c38',
+              color: el.id === guestSeatId ? '#000' : '#606c38',
             }}
           >
             {el.name}

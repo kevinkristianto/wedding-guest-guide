@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './GuestDashboard.css';
 import MenuDisplay from './MenuDisplay';
-import SeatingMap from './SeatingMap'; // Import the SeatingMap component
-import logo from '../assets/images/wedding_logo_fefae0.svg'; // Import the logo
+import SeatingMap from './SeatingMap'; 
+import logo from '../assets/images/wedding_logo_fefae0.svg'; 
 import axios from 'axios';
 
 const GuestDashboard = () => {
-  const { guestToken } = useParams(); // Extract guestToken from route parameters
+  const { guestToken } = useParams(); 
   const [activeTab, setActiveTab] = useState('');
-  const [guestData, setGuestData] = useState(null); // Holds guest-specific data
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [guestData, setGuestData] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
   useEffect(() => {
     const fetchGuestData = async () => {
@@ -63,7 +63,9 @@ const GuestDashboard = () => {
   return (
     <div className="guest-dashboard">
       <header className="dashboard-header">
+      <a href="/">
         <img alt="Wedding Logo" className="app-header-logo" src={logo} />
+        </a>
         <div className="header-buttons">
           <button
             className={`dashboard-tab ${activeTab === 'Menu' ? 'active' : ''}`}
