@@ -75,28 +75,32 @@ const SeatingMap = ({ guestToken }) => {
         <p>Your seat number is {seatName}</p>
       </div>
       <CanvasWrapper initialTransform={canvasTransform} onTransformChange={setCanvasTransform}>
-        {elements.map((el) => (
-          <div
-            key={el.id}
-            className={`canvas-element ${el.type}`}
-            style={{
-              position: 'absolute',
-              left: `${el.x}px`,
-              top: `${el.y}px`,
-              width: `${el.width}px`,
-              height: `${el.height}px`,
-              backgroundColor: el.id === guestSeatId ? '#ffcc00' : el.type === 'table' ? '#606c38' : '#fefae0',
-              border: el.type === 'chair' ? '2px solid #606c38' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '12px',
-              color: el.id === guestSeatId ? '#000' : '#606c38',
-            }}
-          >
-            {el.name}
-          </div>
-        ))}
+        {elements.map((el) => {
+          const isGuestSeat = el.id === guestSeatId;
+          const extraStyle = isGuestSeat
+            ? {
+                backgroundColor: '#ffcc00',
+                color: '#000',
+                border: el.type === 'chair' ? '2px solid #550000' : 'none',
+              }
+            : {};
+  
+          return (
+            <div
+              key={el.id}
+              className={`canvas-element ${el.type}`}
+              style={{
+                left: `${el.x}px`,
+                top: `${el.y}px`,
+                width: `${el.width}px`,
+                height: `${el.height}px`,
+                ...extraStyle,
+              }}
+            >
+              {el.name}
+            </div>
+          );
+        })}
       </CanvasWrapper>
     </div>
   );
