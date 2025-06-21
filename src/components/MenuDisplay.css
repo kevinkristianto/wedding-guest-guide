@@ -16,35 +16,58 @@
   margin-bottom: 20px;
 }
 
-.menu-details p {
-  font-size: 18px;
-  margin: 10px 0;
-  color: #550000;
-}
-
 .allergy-section {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 .allergy-section h3 {
-  font-size: 20px;
+  font-size: 18px;
   color: #300000;
   margin-bottom: 10px;
 }
 
-.allergy-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.allergy-section li {
-  font-size: 16px;
+.allergy-list {
+  font-size: 15px;
   color: #550000;
   margin-bottom: 5px;
 }
 
+.no-allergy-note {
+  font-size: 15px;
+}
+
 .allergy-note {
-  font-size: 14px;
+  font-size: 12px;
   color: #550000;
+  margin-top: 10px;
+}
+
+.section-details {
+  margin-top: 40px;
+}
+
+.menu-description {
+  font-size: 0.9em;
+  font-style: italic;
+  color: #550000;
+  margin-top: -0.5em;
+}
+
+.menu-name {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #550000;
+}
+
+.dessert-section {
+  font-size: 18px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.dessert-name {
+  font-size: 18px;
+  margin-bottom: 15px;
   margin-top: 10px;
 }

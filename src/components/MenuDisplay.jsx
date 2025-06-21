@@ -6,16 +6,48 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
     if (menuType === 'Standard') {
       return (
         <div className="menu-details">
-          <p>Appetiser: Standard Appetiser</p>
-          <p>
-            Main Course: {mainCourse}
-            {mainCourse === 'Grilled Ribeye' && steakCook && (
-              <span>
-                <i> - {steakCook}</i>
-              </span>
-            )}
+          <p className="menu-name">
+            <b>Amuse Bouche</b>
           </p>
-          <p>Dessert: Standard Dessert</p>
+          <p class="menu-description">Crab & Pearls</p>
+          <p className="menu-name">
+            <b>Beef Carpaccio</b>
+          </p>
+          <p class="menu-description">Truffle aioli, Parmesan, Rockets</p>
+          <p className="menu-name">
+            <b>Spinach Ravioli</b>
+          </p>
+          <p class="menu-description">Spinach, Ricotta Cheese, Creamy Pesto</p>
+          <p className="menu-name">
+            <b>Lime Granite</b>
+          </p>
+          <p className="menu-name">
+            <b>
+              {mainCourse}
+              {mainCourse === 'Grilled Ribeye' && steakCook && (
+                <span>
+                  <i> - {steakCook}</i>
+                </span>
+              )}
+            </b>
+          </p>
+
+          <p className="menu-description">
+            <em>
+              {mainCourse === 'Grilled Ribeye'
+                ? 'USDA Angus Ribeye, Potato Pave, Garlic Butter, Peppercorn Sauce'
+                : 'Mashed Potato, Green Pea Puree, Tomato Confit, Dill Sauce'}
+            </em>
+          </p>
+          <p className="dessert-section">
+            <b>Dessert</b>
+          </p>
+          <p className="dessert-name">
+            <b>Tiramisu al Pistachio</b>
+          </p>
+          <p class="menu-description">
+            Burnt Chocolate, Raspberry coulies, Salted Caramel Tuile
+          </p>
         </div>
       );
     } else if (menuType === 'Vegan') {
@@ -35,20 +67,16 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
       <h2>Menu</h2>
       {renderMenu()}
       <div className="allergy-section">
-        <h3>Confirmed Allergies</h3>
+        <h3>Allergies</h3>
         {allergies.length > 0 ? (
-          <ul>
-            {allergies.map((allergy, index) => (
-              <li key={index}>{allergy}</li>
-            ))}
-          </ul>
+          <p className="allergy-list">{allergies.join(', ')}</p>
         ) : (
-          <p>No allergies confirmed.</p>
+          <p className="no-allergy-note">No allergies confirmed.</p>
         )}
         <p className="allergy-note">
           <i>
-            If these allergies are not correct, please let one of the crew
-            members know as soon as possible. Thank you.
+            *If these allergies are not correct, please let one of the crew
+            members know as soon as possible
           </i>
         </p>
       </div>

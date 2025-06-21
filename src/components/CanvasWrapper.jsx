@@ -3,7 +3,9 @@ import './CanvasWrapper.css';
 
 const CanvasWrapper = ({ children, onTransformChange, initialTransform }) => {
   const [zoomLevel, setZoomLevel] = useState(initialTransform?.zoomLevel || 1);
-  const [contentPosition, setContentPosition] = useState(initialTransform?.contentPosition || { x: 0, y: 0 });
+  const [contentPosition, setContentPosition] = useState(
+    initialTransform?.contentPosition || { x: 0, y: 0 }
+  );
   const [isPanning, setIsPanning] = useState(false);
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const contentRef = useRef(null);

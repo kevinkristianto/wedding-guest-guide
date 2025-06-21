@@ -8,24 +8,35 @@ const SeatingMap = ({ guestToken }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [elements, setElements] = useState([]);
-  const [canvasTransform, setCanvasTransform] = useState({ zoomLevel: 1, contentPosition: { x: 0, y: 0 } });
+  const [canvasTransform, setCanvasTransform] = useState({
+    zoomLevel: 1,
+    contentPosition: { x: 0, y: 0 },
+  });
   const [guestSeatId, setGuestSeatId] = useState(null);
 
   useEffect(() => {
     const fetchSeatInfo = async () => {
       try {
-        const guestRes = await axios.get(`http://localhost:5000/api/guests/token/${guestToken}`);
+        const guestRes = await axios.get(
+          `http://localhost:5000/api/guests/token/${guestToken}`
+        );
         const guestName = guestRes.data.name;
 
         const layoutName = 'showcase-1';
 
-        const layoutRes = await axios.get(`http://localhost:5000/api/layouts/${layoutName}`);
+        const layoutRes = await axios.get(
+          `http://localhost:5000/api/layouts/${layoutName}`
+        );
 
         if (Array.isArray(layoutRes.data) && layoutRes.data.length > 1) {
-          throw new Error('There are more than 1 layouts, please delete the unused one');
+          throw new Error(
+            'There are more than 1 layouts, please delete the unused one'
+          );
         }
 
-        const guestElement = layoutRes.data.elements.find((el) => el.guest === guestName);
+        const guestElement = layoutRes.data.elements.find(
+          (el) => el.guest === guestName
+        );
 
         if (guestElement) {
           setSeatName(guestElement.name || 'Not assigned');
@@ -38,7 +49,10 @@ const SeatingMap = ({ guestToken }) => {
         setElements(layoutRes.data.elements || []);
         setLoading(false);
       } catch (err) {
-        setError(err.message || 'Failed to load seat information. Please try again later.');
+        setError(
+          err.message ||
+            'Failed to load seat information. Please try again later.'
+        );
         setLoading(false);
       }
     };
@@ -58,7 +72,10 @@ const SeatingMap = ({ guestToken }) => {
     const offsetX = canvasWidth / 2 - seatCenterX;
     const offsetY = canvasHeight / 2 - seatCenterY;
 
-    setCanvasTransform({ zoomLevel: 1, contentPosition: { x: offsetX, y: offsetY } });
+    setCanvasTransform({
+      zoomLevel: 1,
+      contentPosition: { x: offsetX, y: offsetY },
+    });
   };
 
   if (loading) {
@@ -74,7 +91,10 @@ const SeatingMap = ({ guestToken }) => {
       <div className="seating-name-display">
         <p>Your seat number is {seatName}</p>
       </div>
-      <CanvasWrapper initialTransform={canvasTransform} onTransformChange={setCanvasTransform}>
+      <CanvasWrapper
+        initialTransform={canvasTransform}
+        onTransformChange={setCanvasTransform}
+      >
         {elements.map((el) => {
           const isGuestSeat = el.id === guestSeatId;
           const extraStyle = isGuestSeat
@@ -84,7 +104,7 @@ const SeatingMap = ({ guestToken }) => {
                 border: el.type === 'chair' ? '2px solid #550000' : 'none',
               }
             : {};
-  
+
           return (
             <div
               key={el.id}

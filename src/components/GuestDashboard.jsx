@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './GuestDashboard.css';
 import MenuDisplay from './MenuDisplay';
-import SeatingMap from './SeatingMap'; 
-import logo from '../assets/images/wedding_logo_fefae0.svg'; 
+import SeatingMap from './SeatingMap';
+import logo from '../assets/images/wedding_logo_fefae0.svg';
 import axios from 'axios';
 
 const GuestDashboard = () => {
-  const { guestToken } = useParams(); 
+  const { guestToken } = useParams();
   const [activeTab, setActiveTab] = useState('');
-  const [guestData, setGuestData] = useState(null); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [guestData, setGuestData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchGuestData = async () => {
@@ -63,8 +63,8 @@ const GuestDashboard = () => {
   return (
     <div className="guest-dashboard">
       <header className="dashboard-header">
-      <a href="/">
-        <img alt="Wedding Logo" className="app-header-logo" src={logo} />
+        <a href="/">
+          <img alt="Wedding Logo" className="app-header-logo" src={logo} />
         </a>
         <div className="header-buttons">
           <button
