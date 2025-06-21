@@ -114,6 +114,8 @@ const SeatingMap = ({ guestToken }) => {
                 top: `${el.y}px`,
                 width: `${el.width}px`,
                 height: `${el.height}px`,
+                transform: `rotate(${el.rotation || 0}deg)`,
+                transformOrigin: 'center center',
                 ...extraStyle,
               }}
             >

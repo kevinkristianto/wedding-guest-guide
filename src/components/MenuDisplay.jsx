@@ -3,7 +3,7 @@ import './MenuDisplay.css';
 
 const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
   const renderMenu = () => {
-    if (menuType === 'Standard') {
+    if (mainCourse === 'Grilled Ribeye' || mainCourse === 'Salmon al Forno') {
       return (
         <div className="menu-details">
           <p className="menu-name">
@@ -21,24 +21,35 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
           <p className="menu-name">
             <b>Lime Granite</b>
           </p>
-          <p className="menu-name">
-            <b>
-              {mainCourse}
-              {mainCourse === 'Grilled Ribeye' && steakCook && (
-                <span>
-                  <i> - {steakCook}</i>
-                </span>
-              )}
-            </b>
-          </p>
+          {mainCourse ? (
+            <>
+              <p className="menu-name">
+                <b>
+                  {mainCourse}
+                  {mainCourse === 'Grilled Ribeye' && steakCook && (
+                    <span>
+                      <i> - {steakCook}</i>
+                    </span>
+                  )}
+                </b>
+              </p>
 
-          <p className="menu-description">
-            <em>
-              {mainCourse === 'Grilled Ribeye'
-                ? 'USDA Angus Ribeye, Potato Pave, Garlic Butter, Peppercorn Sauce'
-                : 'Mashed Potato, Green Pea Puree, Tomato Confit, Dill Sauce'}
-            </em>
-          </p>
+              <p className="menu-description">
+                <em>
+                  {{
+                    'Grilled Ribeye':
+                      'USDA Angus Ribeye, Potato Pave, Garlic Butter, Peppercorn Sauce',
+                    'Salmon al Forno':
+                      'Mashed Potato, Green Pea Puree, Tomato Confit, Dill Sauce',
+                  }[mainCourse] || 'No main course has been selected'}
+                </em>
+              </p>
+            </>
+          ) : (
+            <p className="menu-name">
+              <b>No main course has been selected</b>
+            </p>
+          )}
           <p className="dessert-section">
             <b>Dessert</b>
           </p>
@@ -50,12 +61,60 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
           </p>
         </div>
       );
-    } else if (menuType === 'Vegan') {
+    } else if (mainCourse === 'Aubergine Schnitzels' || mainCourse === 'Roasted Cauliflower') {
       return (
         <div className="menu-details">
-          <p>Appetiser: Vegan Appetiser</p>
-          <p>Main course: Vegan Main course</p>
-          <p>Dessert: Vegan Dessert</p>
+          <p className="menu-name">
+            <b>Amuse Bouche</b>
+          </p>
+          <p class="menu-description">Wild Mushroom Tartlet</p>
+          <p class="menu-description">Shimeji, Morels, Oyster Mushroom</p>
+          <p className="menu-name">
+            <b>Panzanella</b>
+          </p>
+          <p class="menu-description">
+            Cherry Tomato, Cucumber, Ciabatta, Aged Balsamic
+          </p>
+          <p className="menu-name">
+            <b>Gnocchi Pesto</b>
+          </p>
+          <p class="menu-description">Potato, Pine nuts, Basil Pesto</p>
+          <p className="menu-name">
+            <b>Lime Granite</b>
+          </p>
+          {mainCourse ? (
+            <>
+              <p className="menu-name">
+                <b>
+                  {mainCourse}
+                </b>
+              </p>
+
+              <p className="menu-description">
+                <em>
+                  {{
+                    'Aubergine Schnitzels':
+                      'Corn Flakes, Sweet Potato Mashed, Romesco Sauce',
+                    'Roasted Cauliflower':
+                      'Cauliflower, Potato Pave, Honey Glazed Carrots, Chimmichurri',
+                  }[mainCourse] || 'No main course has been selected'}
+                </em>
+              </p>
+            </>
+          ) : (
+            <p className="menu-name">
+              <b>No main course has been selected</b>
+            </p>
+          )}
+          <p className="dessert-section">
+            <b>Dessert</b>
+          </p>
+          <p className="dessert-name">
+            <b>Tiramisu al Pistachio</b>
+          </p>
+          <p class="menu-description">
+            Burnt Chocolate, Raspberry coulies, Salted Caramel Tuile
+          </p>
         </div>
       );
     }
