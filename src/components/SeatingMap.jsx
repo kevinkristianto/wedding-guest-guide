@@ -22,7 +22,7 @@ const SeatingMap = ({ guestToken }) => {
         );
         const guestName = guestRes.data.name;
 
-        const layoutName = 'showcase-1';
+        const layoutName = 'kevin-cia-lobo';
 
         const layoutRes = await axios.get(
           `http://localhost:5000/api/layouts/${layoutName}`
