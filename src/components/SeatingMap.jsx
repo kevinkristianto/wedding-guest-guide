@@ -18,14 +18,14 @@ const SeatingMap = ({ guestToken }) => {
     const fetchSeatInfo = async () => {
       try {
         const guestRes = await axios.get(
-          `http://localhost:5000/api/guests/token/${guestToken}`
+          `${process.env.REACT_APP_BACKEND_URL}/api/guests/token/${guestToken}`
         );
         const guestName = guestRes.data.name;
 
         const layoutName = 'kevin-cia-lobo';
 
         const layoutRes = await axios.get(
-          `http://localhost:5000/api/layouts/${layoutName}`
+          `${process.env.REACT_APP_BACKEND_URL}/api/layouts/${layoutName}`
         );
 
         if (Array.isArray(layoutRes.data) && layoutRes.data.length > 1) {

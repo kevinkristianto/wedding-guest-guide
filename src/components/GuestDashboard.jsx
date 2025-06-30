@@ -17,7 +17,7 @@ const GuestDashboard = () => {
     const fetchGuestData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/guests/token/${guestToken}`
+          `${process.env.REACT_APP_BACKEND_URL}/api/guests/token/${guestToken}`
         );
         setGuestData(res.data);
         setLoading(false);
