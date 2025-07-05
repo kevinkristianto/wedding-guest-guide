@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const GuestDashboard = () => {
   const { guestToken } = useParams();
-  const [activeTab, setActiveTab] = useState('Menu');
+  const [activeTab, setActiveTab] = useState('Seating Plan');
   const [guestData, setGuestData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
