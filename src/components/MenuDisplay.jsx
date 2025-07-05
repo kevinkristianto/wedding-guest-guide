@@ -61,7 +61,10 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
           </p>
         </div>
       );
-    } else if (mainCourse === 'Aubergine Schnitzels' || mainCourse === 'Roasted Cauliflower') {
+    } else if (
+      mainCourse === 'Aubergine Schnitzels' ||
+      mainCourse === 'Roasted Cauliflower'
+    ) {
       return (
         <div className="menu-details">
           <p className="menu-name">
@@ -85,9 +88,7 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
           {mainCourse ? (
             <>
               <p className="menu-name">
-                <b>
-                  {mainCourse}
-                </b>
+                <b>{mainCourse}</b>
               </p>
 
               <p className="menu-description">

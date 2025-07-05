@@ -119,7 +119,13 @@ const SeatingMap = ({ guestToken }) => {
                 ...extraStyle,
               }}
             >
-              {el.name}
+              {el.type === 'others' ? (
+                <div className="others-shape">
+                  <span className="others-label">{el.name}</span>
+                </div>
+              ) : (
+                el.name
+              )}
             </div>
           );
         })}
