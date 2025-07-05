@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import CanvasWrapper from './CanvasWrapper.jsx';
 import './SeatingMap.css';
@@ -13,6 +13,8 @@ const SeatingMap = ({ guestToken }) => {
     contentPosition: { x: 0, y: 0 },
   });
   const [guestSeatId, setGuestSeatId] = useState(null);
+
+  const canvasWrapperRef = useRef(null);
 
   useEffect(() => {
     const fetchSeatInfo = async () => {
@@ -41,7 +43,6 @@ const SeatingMap = ({ guestToken }) => {
         if (guestElement) {
           setSeatName(guestElement.name || 'Not assigned');
           setGuestSeatId(guestElement.id);
-          focusCanvasOnSeat(guestElement);
         } else {
           setSeatName('Not assigned');
         }
@@ -62,21 +63,30 @@ const SeatingMap = ({ guestToken }) => {
     }
   }, [guestToken]);
 
-  const focusCanvasOnSeat = (seatElement) => {
-    const canvasWidth = 800;
-    const canvasHeight = 600;
+  useEffect(() => {
+    if (!elements.length || !guestSeatId) return;
 
-    const seatCenterX = seatElement.x + seatElement.width / 2;
-    const seatCenterY = seatElement.y + seatElement.height / 2;
+    const guestSeat = elements.find((el) => el.id === guestSeatId);
+    if (!guestSeat) return;
 
-    const offsetX = canvasWidth / 2 - seatCenterX;
-    const offsetY = canvasHeight / 2 - seatCenterY;
+    const wrapper = canvasWrapperRef.current;
+    if (!wrapper) return;
 
-    setCanvasTransform({
-      zoomLevel: 1,
-      contentPosition: { x: offsetX, y: offsetY },
+    requestAnimationFrame(() => {
+      const { width: viewportWidth, height: viewportHeight } = wrapper.getBoundingClientRect();
+
+      const seatCenterX = guestSeat.x + guestSeat.width / 2;
+      const seatCenterY = guestSeat.y + guestSeat.height / 2;
+
+      setCanvasTransform({
+        zoomLevel: 1,
+        contentPosition: {
+          x: viewportWidth / 2 - seatCenterX,
+          y: viewportHeight / 2 - seatCenterY,
+        },
+      });
     });
-  };
+  }, [elements, guestSeatId]);
 
   if (loading) {
     return <p className="seating-message">Loading seat information...</p>;
@@ -87,7 +97,7 @@ const SeatingMap = ({ guestToken }) => {
   }
 
   return (
-    <div className="seating-map">
+    <div className="seating-map" ref={canvasWrapperRef}>
       <div className="seating-name-display">
         <p>Your seat number is {seatName}</p>
       </div>
@@ -114,6 +124,7 @@ const SeatingMap = ({ guestToken }) => {
                 top: `${el.y}px`,
                 width: `${el.width}px`,
                 height: `${el.height}px`,
+                position: 'absolute',
                 transform: `rotate(${el.rotation || 0}deg)`,
                 transformOrigin: 'center center',
                 ...extraStyle,

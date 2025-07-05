@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './CanvasWrapper.css';
 
-const CanvasWrapper = ({ children, onTransformChange }) => {
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [contentPosition, setContentPosition] = useState({ x: 0, y: 0 });
+const CanvasWrapper = ({ children, onTransformChange, initialTransform }) => {
+  const [zoomLevel, setZoomLevel] = useState(initialTransform?.zoomLevel || 1);
+  const [contentPosition, setContentPosition] = useState(
+    initialTransform?.contentPosition || { x: 0, y: 0 }
+  );
   const [isPanning, setIsPanning] = useState(false);
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const [isTouching, setIsTouching] = useState(false);
   const [lastTouch, setLastTouch] = useState(null);
+  const [lastPinchDistance, setLastPinchDistance] = useState(null);
+  const [mouseMoved, setMouseMoved] = useState(false);
+  const [touchMoved, setTouchMoved] = useState(false);
+
   const contentRef = useRef(null);
 
   useEffect(() => {
@@ -16,8 +22,13 @@ const CanvasWrapper = ({ children, onTransformChange }) => {
     }
   }, [zoomLevel, contentPosition, onTransformChange]);
 
-  // Allow panning to start anywhere, but only trigger click if no movement
-  const [mouseMoved, setMouseMoved] = useState(false);
+  useEffect(() => {
+    if (initialTransform) {
+      setZoomLevel(initialTransform.zoomLevel || 1);
+      setContentPosition(initialTransform.contentPosition || { x: 0, y: 0 });
+    }
+  }, [initialTransform]);
+
   const handleMouseDown = (e) => {
     setIsPanning(true);
     setStartPan({
@@ -47,9 +58,6 @@ const CanvasWrapper = ({ children, onTransformChange }) => {
     setZoomLevel((prev) => Math.min(Math.max(prev + zoomChange, 0.5), 2));
   };
 
-  // For pinch zoom
-  const [lastPinchDistance, setLastPinchDistance] = useState(null);
-
   const getTouchDistance = (touches) => {
     if (touches.length < 2) return 0;
     const dx = touches[0].clientX - touches[1].clientX;
@@ -57,8 +65,6 @@ const CanvasWrapper = ({ children, onTransformChange }) => {
     return Math.sqrt(dx * dx + dy * dy);
   };
 
-  // Touch: allow panning/zooming anywhere, but only trigger click if no movement
-  const [touchMoved, setTouchMoved] = useState(false);
   const handleTouchStart = (e) => {
     if (e.touches.length === 1) {
       setIsTouching(true);
@@ -75,21 +81,18 @@ const CanvasWrapper = ({ children, onTransformChange }) => {
 
   const handleTouchMove = (e) => {
     if (e.touches.length === 2 && lastPinchDistance !== null) {
-      // Pinch zoom
       const newDistance = getTouchDistance(e.touches);
       const delta = newDistance - lastPinchDistance;
-      if (Math.abs(delta) > 2) { // threshold to avoid jitter
+      if (Math.abs(delta) > 2) {
         setZoomLevel((prev) => {
-          let next = prev + delta * 0.003; // adjust sensitivity as needed
-          next = Math.min(Math.max(next, 0.5), 2);
-          return next;
+          let next = prev + delta * 0.003;
+          return Math.min(Math.max(next, 0.5), 2);
         });
         setLastPinchDistance(newDistance);
       }
       setTouchMoved(true);
       e.preventDefault();
     } else if (isTouching && e.touches.length === 1 && lastTouch) {
-      // Panning
       const deltaX = e.touches[0].clientX - lastTouch.x;
       const deltaY = e.touches[0].clientY - lastTouch.y;
       setContentPosition((prev) => ({
@@ -134,7 +137,12 @@ const CanvasWrapper = ({ children, onTransformChange }) => {
         ref={contentRef}
         style={{
           transform: `translate(${contentPosition.x}px, ${contentPosition.y}px) scale(${zoomLevel})`,
-          transformOrigin: '0 0',
+          transformOrigin: 'top left',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          width: '100%',
+          height: '100%',
         }}
       >
         {children}
