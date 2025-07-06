@@ -123,65 +123,49 @@ const CanvasWrapper = ({
   };
 
   const handleTouchMove = (e) => {
-    if (interactionLocked) return;
+  if (interactionLocked) return;
 
-    if (e.touches.length === 2 && lastPinchDistance !== null) {
-      const newDistance = getTouchDistance(e.touches);
-      const midpoint = getTouchMidpoint(e.touches);
+  if (e.touches.length === 2 && lastPinchDistance !== null) {
+    const newDistance = getTouchDistance(e.touches);
+    const zoomFactor = newDistance / lastPinchDistance;
+    const prevZoom = zoomLevel;
+    const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
 
-      const wrapperRect = e.currentTarget.getBoundingClientRect();
-      const centerX = midpoint.x - wrapperRect.left;
-      const centerY = midpoint.y - wrapperRect.top;
+    // Keep position locked during zoom, no jumping
+    const newPos = contentPositionRef.current;
 
-      const prevZoom = zoomLevel;
-      const zoomFactor = newDistance / lastPinchDistance;
-      const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
-      const scaleChange = newZoom / prevZoom;
+    // Apply transform immediately for smooth visual
+    applyTransformDirectly(newPos, newZoom);
 
-      const prev = contentPositionRef.current;
-      const newPos = {
-        x: centerX - (centerX - prev.x) * scaleChange,
-        y: centerY - (centerY - prev.y) * scaleChange,
-      };
-
-      contentPositionRef.current = newPos;
-
-      // Apply transform directly for immediate response
-      applyTransformDirectly(newPos, newZoom);
-
-      // Throttle React state update to every ~50ms
-      if (Date.now() - lastTouchMoveUpdate.current > 50) {
-        setContentPosition(newPos);
-        setZoomLevel(newZoom);
-        lastTouchMoveUpdate.current = Date.now();
-      }
-
-      setLastPinchDistance(newDistance);
-      setTouchMidpoint(midpoint);
-      e.preventDefault();
-    } else if (isTouching && e.touches.length === 1 && lastTouch) {
-      const deltaX = e.touches[0].clientX - lastTouch.x;
-      const deltaY = e.touches[0].clientY - lastTouch.y;
-      const prev = contentPositionRef.current;
-      const newPos = {
-        x: prev.x + deltaX,
-        y: prev.y + deltaY,
-      };
-      contentPositionRef.current = newPos;
-
-      // Apply transform directly for immediate response
-      applyTransformDirectly(newPos, zoomLevel);
-
-      // Throttle React state update
-      if (Date.now() - lastTouchMoveUpdate.current > 50) {
-        setContentPosition(newPos);
-        lastTouchMoveUpdate.current = Date.now();
-      }
-
-      setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
-      e.preventDefault();
+    // Throttle React state updates to avoid jitter
+    if (Date.now() - lastTouchMoveUpdate.current > 50) {
+      setZoomLevel(newZoom);
+      lastTouchMoveUpdate.current = Date.now();
     }
-  };
+
+    setLastPinchDistance(newDistance);
+    e.preventDefault();
+  } else if (isTouching && e.touches.length === 1 && lastTouch) {
+    const deltaX = e.touches[0].clientX - lastTouch.x;
+    const deltaY = e.touches[0].clientY - lastTouch.y;
+    const prev = contentPositionRef.current;
+    const newPos = {
+      x: prev.x + deltaX,
+      y: prev.y + deltaY,
+    };
+    contentPositionRef.current = newPos;
+
+    applyTransformDirectly(newPos, zoomLevel);
+
+    if (Date.now() - lastTouchMoveUpdate.current > 50) {
+      setContentPosition(newPos);
+      lastTouchMoveUpdate.current = Date.now();
+    }
+
+    setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    e.preventDefault();
+  }
+};
 
   const handleTouchEnd = (e) => {
     if (interactionLocked) return;
