@@ -22,6 +22,16 @@ const CanvasWrapper = ({
 
   const contentRef = useRef(null);
 
+  // Add this ref to throttle React state updates during touch move
+  const lastTouchMoveUpdate = useRef(Date.now());
+
+  // Apply transform directly to DOM for immediate visual feedback on touch move
+  const applyTransformDirectly = (pos, zoom) => {
+    if (contentRef.current) {
+      contentRef.current.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${zoom})`;
+    }
+  };
+
   useEffect(() => {
     contentPositionRef.current = contentPosition;
     if (onTransformChange) {
@@ -135,8 +145,17 @@ const CanvasWrapper = ({
       };
 
       contentPositionRef.current = newPos;
-      setContentPosition(newPos);
-      setZoomLevel(newZoom);
+
+      // Apply transform directly for immediate response
+      applyTransformDirectly(newPos, newZoom);
+
+      // Throttle React state update to every ~50ms
+      if (Date.now() - lastTouchMoveUpdate.current > 50) {
+        setContentPosition(newPos);
+        setZoomLevel(newZoom);
+        lastTouchMoveUpdate.current = Date.now();
+      }
+
       setLastPinchDistance(newDistance);
       setTouchMidpoint(midpoint);
       e.preventDefault();
@@ -149,7 +168,16 @@ const CanvasWrapper = ({
         y: prev.y + deltaY,
       };
       contentPositionRef.current = newPos;
-      setContentPosition(newPos);
+
+      // Apply transform directly for immediate response
+      applyTransformDirectly(newPos, zoomLevel);
+
+      // Throttle React state update
+      if (Date.now() - lastTouchMoveUpdate.current > 50) {
+        setContentPosition(newPos);
+        lastTouchMoveUpdate.current = Date.now();
+      }
+
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
       e.preventDefault();
     }
