@@ -11,17 +11,19 @@ const CanvasWrapper = ({
   const [contentPosition, setContentPosition] = useState(
     initialTransform?.contentPosition || { x: 0, y: 0 }
   );
+
+  const contentPositionRef = useRef(contentPosition);
   const [isPanning, setIsPanning] = useState(false);
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const [isTouching, setIsTouching] = useState(false);
   const [lastTouch, setLastTouch] = useState(null);
   const [lastPinchDistance, setLastPinchDistance] = useState(null);
-  const [mouseMoved, setMouseMoved] = useState(false);
-  const [touchMoved, setTouchMoved] = useState(false);
+  const [touchMidpoint, setTouchMidpoint] = useState(null);
 
   const contentRef = useRef(null);
 
   useEffect(() => {
+    contentPositionRef.current = contentPosition;
     if (onTransformChange) {
       onTransformChange({ zoomLevel, contentPosition });
     }
@@ -38,57 +40,61 @@ const CanvasWrapper = ({
     if (interactionLocked) return;
     setIsPanning(true);
     setStartPan({
-      x: e.clientX - contentPosition.x,
-      y: e.clientY - contentPosition.y,
+      x: e.clientX - contentPositionRef.current.x,
+      y: e.clientY - contentPositionRef.current.y,
     });
-    setMouseMoved(false);
   };
 
   const handleMouseMove = (e) => {
     if (interactionLocked || !isPanning) return;
-    setMouseMoved(true);
-    const newX = e.clientX - startPan.x;
-    const newY = e.clientY - startPan.y;
-    setContentPosition({ x: newX, y: newY });
+    const newPos = {
+      x: e.clientX - startPan.x,
+      y: e.clientY - startPan.y,
+    };
+    contentPositionRef.current = newPos;
+    setContentPosition(newPos);
   };
 
   const handleMouseUp = () => {
     if (interactionLocked) return;
     setIsPanning(false);
-    setMouseMoved(false);
   };
 
   const handleWheel = (e) => {
     if (interactionLocked) return;
     e.preventDefault();
-    e.stopPropagation();
-
     const ZOOM_SENSITIVITY = 0.0015;
-    const wrapperRect = e.currentTarget.getBoundingClientRect();
 
-    const mouseX = e.clientX - wrapperRect.left;
-    const mouseY = e.clientY - wrapperRect.top;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
 
     const prevZoom = zoomLevel;
     const zoomFactor = 1 - e.deltaY * ZOOM_SENSITIVITY;
     const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
-
     const scaleChange = newZoom / prevZoom;
 
-    setContentPosition((prev) => ({
+    const prev = contentPositionRef.current;
+    const newPos = {
       x: mouseX - (mouseX - prev.x) * scaleChange,
       y: mouseY - (mouseY - prev.y) * scaleChange,
-    }));
+    };
 
+    contentPositionRef.current = newPos;
+    setContentPosition(newPos);
     setZoomLevel(newZoom);
   };
 
   const getTouchDistance = (touches) => {
-    if (touches.length < 2) return 0;
     const dx = touches[0].clientX - touches[1].clientX;
     const dy = touches[0].clientY - touches[1].clientY;
     return Math.sqrt(dx * dx + dy * dy);
   };
+
+  const getTouchMidpoint = (touches) => ({
+    x: (touches[0].clientX + touches[1].clientX) / 2,
+    y: (touches[0].clientY + touches[1].clientY) / 2,
+  });
 
   const handleTouchStart = (e) => {
     if (interactionLocked) return;
@@ -97,12 +103,12 @@ const CanvasWrapper = ({
       setIsTouching(true);
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
       setLastPinchDistance(null);
-      setTouchMoved(false);
+      setTouchMidpoint(null);
     } else if (e.touches.length === 2) {
       setIsTouching(false);
       setLastTouch(null);
       setLastPinchDistance(getTouchDistance(e.touches));
-      setTouchMoved(false);
+      setTouchMidpoint(getTouchMidpoint(e.touches));
     }
   };
 
@@ -111,28 +117,40 @@ const CanvasWrapper = ({
 
     if (e.touches.length === 2 && lastPinchDistance !== null) {
       const newDistance = getTouchDistance(e.touches);
-      const delta = newDistance - lastPinchDistance;
-      if (Math.abs(delta) > 2) {
-        setZoomLevel((prev) => {
-          const ZOOM_SENSITIVITY = 0.005;
-          const zoomFactor = 1 + delta * ZOOM_SENSITIVITY;
-          const newZoom = prev * zoomFactor;
-          return Math.min(Math.max(newZoom, 0.5), 2);
-        });
+      const midpoint = getTouchMidpoint(e.touches);
 
-        setLastPinchDistance(newDistance);
-      }
-      setTouchMoved(true);
+      const wrapperRect = e.currentTarget.getBoundingClientRect();
+      const centerX = midpoint.x - wrapperRect.left;
+      const centerY = midpoint.y - wrapperRect.top;
+
+      const prevZoom = zoomLevel;
+      const zoomFactor = newDistance / lastPinchDistance;
+      const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
+      const scaleChange = newZoom / prevZoom;
+
+      const prev = contentPositionRef.current;
+      const newPos = {
+        x: centerX - (centerX - prev.x) * scaleChange,
+        y: centerY - (centerY - prev.y) * scaleChange,
+      };
+
+      contentPositionRef.current = newPos;
+      setContentPosition(newPos);
+      setZoomLevel(newZoom);
+      setLastPinchDistance(newDistance);
+      setTouchMidpoint(midpoint);
       e.preventDefault();
     } else if (isTouching && e.touches.length === 1 && lastTouch) {
       const deltaX = e.touches[0].clientX - lastTouch.x;
       const deltaY = e.touches[0].clientY - lastTouch.y;
-      setContentPosition((prev) => ({
+      const prev = contentPositionRef.current;
+      const newPos = {
         x: prev.x + deltaX,
         y: prev.y + deltaY,
-      }));
+      };
+      contentPositionRef.current = newPos;
+      setContentPosition(newPos);
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
-      setTouchMoved(true);
       e.preventDefault();
     }
   };
@@ -144,12 +162,12 @@ const CanvasWrapper = ({
       setIsTouching(false);
       setLastTouch(null);
       setLastPinchDistance(null);
-      setTouchMoved(false);
+      setTouchMidpoint(null);
     } else if (e.touches.length === 1) {
       setIsTouching(true);
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
       setLastPinchDistance(null);
-      setTouchMoved(false);
+      setTouchMidpoint(null);
     }
   };
 
