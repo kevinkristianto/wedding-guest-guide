@@ -13,6 +13,7 @@ const SeatingMap = ({ guestToken }) => {
     contentPosition: { x: 0, y: 0 },
   });
   const [guestSeatId, setGuestSeatId] = useState(null);
+  const [interactionLocked, setInteractionLocked] = useState(true);
 
   const canvasWrapperRef = useRef(null);
 
@@ -72,8 +73,11 @@ const SeatingMap = ({ guestToken }) => {
     const wrapper = canvasWrapperRef.current;
     if (!wrapper) return;
 
+    setInteractionLocked(true); // lock before moving
+
     requestAnimationFrame(() => {
-      const { width: viewportWidth, height: viewportHeight } = wrapper.getBoundingClientRect();
+      const { width: viewportWidth, height: viewportHeight } =
+        wrapper.getBoundingClientRect();
 
       const seatCenterX = guestSeat.x + guestSeat.width / 2;
       const seatCenterY = guestSeat.y + guestSeat.height / 2;
@@ -85,6 +89,10 @@ const SeatingMap = ({ guestToken }) => {
           y: viewportHeight / 2 - seatCenterY,
         },
       });
+
+      setTimeout(() => {
+        setInteractionLocked(false); // unlock after movement
+      }, 100); // delay to allow movement to finish
     });
   }, [elements, guestSeatId]);
 
@@ -104,6 +112,7 @@ const SeatingMap = ({ guestToken }) => {
       <CanvasWrapper
         initialTransform={canvasTransform}
         onTransformChange={setCanvasTransform}
+        interactionLocked={interactionLocked}
       >
         {elements.map((el) => {
           const isGuestSeat = el.id === guestSeatId;
