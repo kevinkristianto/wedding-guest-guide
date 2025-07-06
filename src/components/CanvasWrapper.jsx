@@ -14,6 +14,7 @@ const CanvasWrapper = ({
 
   const contentPositionRef = useRef(contentPosition);
   const zoomLevelRef = useRef(zoomLevel);
+
   const [isPanning, setIsPanning] = useState(false);
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const [isTouching, setIsTouching] = useState(false);
@@ -21,8 +22,11 @@ const CanvasWrapper = ({
   const [lastPinchDistance, setLastPinchDistance] = useState(null);
 
   const contentRef = useRef(null);
+
+  // To throttle React updates on touch move
   const lastTouchMoveUpdate = useRef(Date.now());
 
+  // Update refs when state changes
   useEffect(() => {
     contentPositionRef.current = contentPosition;
     zoomLevelRef.current = zoomLevel;
@@ -38,6 +42,7 @@ const CanvasWrapper = ({
     }
   }, [initialTransform]);
 
+  // Apply transform directly to DOM element for smooth immediate feedback
   const applyTransformDirectly = (pos, zoom) => {
     if (contentRef.current) {
       contentRef.current.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${zoom})`;
@@ -72,20 +77,21 @@ const CanvasWrapper = ({
     if (interactionLocked) return;
     e.preventDefault();
 
+    const ZOOM_SENSITIVITY = 0.0015;
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
     const prevZoom = zoomLevelRef.current;
-    const zoomFactor = 1 - e.deltaY * 0.0015;
+    const zoomFactor = 1 - e.deltaY * ZOOM_SENSITIVITY;
     const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
+    const scaleChange = newZoom / prevZoom;
 
-    const scale = newZoom / prevZoom;
     const prevPos = contentPositionRef.current;
-
+    // Locked zoom center calculation:
     const newPos = {
-      x: mouseX - (mouseX - prevPos.x) * scale,
-      y: mouseY - (mouseY - prevPos.y) * scale,
+      x: mouseX - (mouseX - prevPos.x) * scaleChange,
+      y: mouseY - (mouseY - prevPos.y) * scaleChange,
     };
 
     contentPositionRef.current = newPos;
@@ -123,15 +129,32 @@ const CanvasWrapper = ({
 
     if (e.touches.length === 2 && lastPinchDistance !== null) {
       const newDistance = getTouchDistance(e.touches);
-      const zoomFactor = newDistance / lastPinchDistance;
-      const prevZoom = zoomLevelRef.current;
-      const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
+      const midpoint = getTouchMidpoint(e.touches);
+      const rect = contentRef.current.parentElement.getBoundingClientRect();
 
-      const newPos = contentPositionRef.current; // keep position locked during zoom
+      const centerX = midpoint.x - rect.left;
+      const centerY = midpoint.y - rect.top;
+
+      const prevZoom = zoomLevelRef.current;
+      const scaleChange = newDistance / lastPinchDistance;
+      const newZoom = Math.min(Math.max(prevZoom * scaleChange, 0.5), 2);
+
+      const scale = newZoom / prevZoom;
+
+      const prevPos = contentPositionRef.current;
+      const newPos = {
+        x: centerX - (centerX - prevPos.x) * scale,
+        y: centerY - (centerY - prevPos.y) * scale,
+      };
+
+      contentPositionRef.current = newPos;
+      zoomLevelRef.current = newZoom;
 
       applyTransformDirectly(newPos, newZoom);
 
+      // Throttle React state updates every ~50ms
       if (Date.now() - lastTouchMoveUpdate.current > 50) {
+        setContentPosition(newPos);
         setZoomLevel(newZoom);
         lastTouchMoveUpdate.current = Date.now();
       }
@@ -141,13 +164,14 @@ const CanvasWrapper = ({
     } else if (isTouching && e.touches.length === 1 && lastTouch) {
       const deltaX = e.touches[0].clientX - lastTouch.x;
       const deltaY = e.touches[0].clientY - lastTouch.y;
+
       const prevPos = contentPositionRef.current;
       const newPos = {
         x: prevPos.x + deltaX,
         y: prevPos.y + deltaY,
       };
-      contentPositionRef.current = newPos;
 
+      contentPositionRef.current = newPos;
       applyTransformDirectly(newPos, zoomLevelRef.current);
 
       if (Date.now() - lastTouchMoveUpdate.current > 50) {
