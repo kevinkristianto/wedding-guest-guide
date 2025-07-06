@@ -8,6 +8,8 @@
   width: 100%;
   margin: auto;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .dashboard-header {
@@ -38,6 +40,7 @@
 .dashboard-content {
   margin-top: 20px;
   color: #550000;
+  flex-grow: 1;
 }
 
 .dashboard-message {
@@ -54,5 +57,14 @@
 
 .header-buttons {
   display: flex;
-  gap: 20px; /* Add spacing between buttons */
+  gap: 20px;
+}
+
+.dashboard-footer {
+  background-color: #550000;
+  color: #fefae0;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 14px;
+  margin-top: auto; 
 }

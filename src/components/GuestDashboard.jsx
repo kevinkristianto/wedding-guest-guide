@@ -82,6 +82,11 @@ const GuestDashboard = () => {
         </div>
       </header>
       <div className="dashboard-content">{renderContent()}</div>
+      <footer className="dashboard-footer">
+        <p>
+          If you have any questions, please contact one of the crew members.
+        </p>
+        </footer>
     </div>
   );
 };
