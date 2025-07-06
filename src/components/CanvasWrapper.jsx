@@ -13,27 +13,19 @@ const CanvasWrapper = ({
   );
 
   const contentPositionRef = useRef(contentPosition);
+  const zoomLevelRef = useRef(zoomLevel);
   const [isPanning, setIsPanning] = useState(false);
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const [isTouching, setIsTouching] = useState(false);
   const [lastTouch, setLastTouch] = useState(null);
   const [lastPinchDistance, setLastPinchDistance] = useState(null);
-  const [touchMidpoint, setTouchMidpoint] = useState(null);
 
   const contentRef = useRef(null);
-
-  // Add this ref to throttle React state updates during touch move
   const lastTouchMoveUpdate = useRef(Date.now());
-
-  // Apply transform directly to DOM for immediate visual feedback on touch move
-  const applyTransformDirectly = (pos, zoom) => {
-    if (contentRef.current) {
-      contentRef.current.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${zoom})`;
-    }
-  };
 
   useEffect(() => {
     contentPositionRef.current = contentPosition;
+    zoomLevelRef.current = zoomLevel;
     if (onTransformChange) {
       onTransformChange({ zoomLevel, contentPosition });
     }
@@ -45,6 +37,12 @@ const CanvasWrapper = ({
       setContentPosition(initialTransform.contentPosition || { x: 0, y: 0 });
     }
   }, [initialTransform]);
+
+  const applyTransformDirectly = (pos, zoom) => {
+    if (contentRef.current) {
+      contentRef.current.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${zoom})`;
+    }
+  };
 
   const handleMouseDown = (e) => {
     if (interactionLocked) return;
@@ -73,21 +71,21 @@ const CanvasWrapper = ({
   const handleWheel = (e) => {
     if (interactionLocked) return;
     e.preventDefault();
-    const ZOOM_SENSITIVITY = 0.0015;
 
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    const prevZoom = zoomLevel;
-    const zoomFactor = 1 - e.deltaY * ZOOM_SENSITIVITY;
+    const prevZoom = zoomLevelRef.current;
+    const zoomFactor = 1 - e.deltaY * 0.0015;
     const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
-    const scaleChange = newZoom / prevZoom;
 
-    const prev = contentPositionRef.current;
+    const scale = newZoom / prevZoom;
+    const prevPos = contentPositionRef.current;
+
     const newPos = {
-      x: mouseX - (mouseX - prev.x) * scaleChange,
-      y: mouseY - (mouseY - prev.y) * scaleChange,
+      x: mouseX - (mouseX - prevPos.x) * scale,
+      y: mouseY - (mouseY - prevPos.y) * scale,
     };
 
     contentPositionRef.current = newPos;
@@ -113,59 +111,54 @@ const CanvasWrapper = ({
       setIsTouching(true);
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
       setLastPinchDistance(null);
-      setTouchMidpoint(null);
     } else if (e.touches.length === 2) {
       setIsTouching(false);
       setLastTouch(null);
       setLastPinchDistance(getTouchDistance(e.touches));
-      setTouchMidpoint(getTouchMidpoint(e.touches));
     }
   };
 
   const handleTouchMove = (e) => {
-  if (interactionLocked) return;
+    if (interactionLocked) return;
 
-  if (e.touches.length === 2 && lastPinchDistance !== null) {
-    const newDistance = getTouchDistance(e.touches);
-    const zoomFactor = newDistance / lastPinchDistance;
-    const prevZoom = zoomLevel;
-    const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
+    if (e.touches.length === 2 && lastPinchDistance !== null) {
+      const newDistance = getTouchDistance(e.touches);
+      const zoomFactor = newDistance / lastPinchDistance;
+      const prevZoom = zoomLevelRef.current;
+      const newZoom = Math.min(Math.max(prevZoom * zoomFactor, 0.5), 2);
 
-    // Keep position locked during zoom, no jumping
-    const newPos = contentPositionRef.current;
+      const newPos = contentPositionRef.current; // keep position locked during zoom
 
-    // Apply transform immediately for smooth visual
-    applyTransformDirectly(newPos, newZoom);
+      applyTransformDirectly(newPos, newZoom);
 
-    // Throttle React state updates to avoid jitter
-    if (Date.now() - lastTouchMoveUpdate.current > 50) {
-      setZoomLevel(newZoom);
-      lastTouchMoveUpdate.current = Date.now();
+      if (Date.now() - lastTouchMoveUpdate.current > 50) {
+        setZoomLevel(newZoom);
+        lastTouchMoveUpdate.current = Date.now();
+      }
+
+      setLastPinchDistance(newDistance);
+      e.preventDefault();
+    } else if (isTouching && e.touches.length === 1 && lastTouch) {
+      const deltaX = e.touches[0].clientX - lastTouch.x;
+      const deltaY = e.touches[0].clientY - lastTouch.y;
+      const prevPos = contentPositionRef.current;
+      const newPos = {
+        x: prevPos.x + deltaX,
+        y: prevPos.y + deltaY,
+      };
+      contentPositionRef.current = newPos;
+
+      applyTransformDirectly(newPos, zoomLevelRef.current);
+
+      if (Date.now() - lastTouchMoveUpdate.current > 50) {
+        setContentPosition(newPos);
+        lastTouchMoveUpdate.current = Date.now();
+      }
+
+      setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+      e.preventDefault();
     }
-
-    setLastPinchDistance(newDistance);
-    e.preventDefault();
-  } else if (isTouching && e.touches.length === 1 && lastTouch) {
-    const deltaX = e.touches[0].clientX - lastTouch.x;
-    const deltaY = e.touches[0].clientY - lastTouch.y;
-    const prev = contentPositionRef.current;
-    const newPos = {
-      x: prev.x + deltaX,
-      y: prev.y + deltaY,
-    };
-    contentPositionRef.current = newPos;
-
-    applyTransformDirectly(newPos, zoomLevel);
-
-    if (Date.now() - lastTouchMoveUpdate.current > 50) {
-      setContentPosition(newPos);
-      lastTouchMoveUpdate.current = Date.now();
-    }
-
-    setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
-    e.preventDefault();
-  }
-};
+  };
 
   const handleTouchEnd = (e) => {
     if (interactionLocked) return;
@@ -174,12 +167,10 @@ const CanvasWrapper = ({
       setIsTouching(false);
       setLastTouch(null);
       setLastPinchDistance(null);
-      setTouchMidpoint(null);
     } else if (e.touches.length === 1) {
       setIsTouching(true);
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
       setLastPinchDistance(null);
-      setTouchMidpoint(null);
     }
   };
 
