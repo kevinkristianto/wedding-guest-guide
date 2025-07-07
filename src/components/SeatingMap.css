@@ -1,9 +1,9 @@
 .seating-map {
   text-align: center;
   padding: 20px;
-  background-color: #fefae0;
+  background-color: #d7cbbc;
   border-radius: 12px;
-  color: #550000;
+  color: #200000;
 }
 
 .seating-message {
@@ -19,7 +19,7 @@
   position: relative;
   width: 100%;
   height: 600px;
-  border: 2px solid #550000;
+  border: 2px solid #200000;
   border-radius: 12px;
   overflow: hidden;
   background-color: #fcfbef;
@@ -37,24 +37,24 @@
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  color: #550000;
+  color: #200000;
 }
 
 .canvas-element.table {
-  background-color: #fefae0;
-  border: 1px solid #550000;
+  background-color: #d7cbbc;
+  border: 1px solid #200000;
   border-radius: 5px;
-  color: #550000;
+  color: #200000;
 }
 
 .canvas-element.chair {
-  background-color: #fefae0;
-  border: 1px solid #550000;
+  background-color: #d7cbbc;
+  border: 1px solid #200000;
   border-radius: 5px;
 }
 
 .seating-name-display {
-  color: #550000;
+  color: #200000;
   font-weight: bold;
   font-size: 20px;
 }
@@ -63,7 +63,7 @@
   width: 100%;
   height: 100%;
   background: #f1f1ed;
-  border: 1px solid #550000;
+  border: 1px solid #200000;
   border-radius: 5px;
   display: flex;
   align-items: center;

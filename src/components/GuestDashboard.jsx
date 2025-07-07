@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import './GuestDashboard.css';
 import MenuDisplay from './MenuDisplay';
 import SeatingMap from './SeatingMap';
-import logo from '../assets/images/wedding_logo_fefae0.svg';
+import logo from '../assets/images/wedding_logo_d7cbbc.svg';
 import axios from 'axios';
 
 const GuestDashboard = () => {

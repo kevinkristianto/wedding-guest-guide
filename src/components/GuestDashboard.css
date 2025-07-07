@@ -1,8 +1,8 @@
 .guest-dashboard {
   font-family: 'Poppins', sans-serif;
   text-align: center;
-  background-color: #550000;
-  color: #550000;
+  background-color: #200000;
+  color: #200000;
   min-height: 100vh;
   max-width: 1200px;
   width: 100%;
@@ -18,14 +18,17 @@
   justify-content: space-between;
   padding: 10px;
   width: 100%;
-  background-color: #550000;
+  background-color: #200000;
   box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .dashboard-tab {
   font-size: 16px;
   font-weight: bold;
-  color: #fefae0;
+  color: #d7cbbc;
   background: none;
   border: none;
   cursor: pointer;
@@ -39,13 +42,13 @@
 
 .dashboard-content {
   margin-top: 20px;
-  color: #550000;
+  color: #200000;
   flex-grow: 1;
 }
 
 .dashboard-message {
   font-size: 18px;
-  color: #fefae0;
+  color: #d7cbbc;
 }
 
 .app-header-logo {
@@ -61,8 +64,8 @@
 }
 
 .dashboard-footer {
-  background-color: #550000;
-  color: #fefae0;
+  background-color: #200000;
+  color: #d7cbbc;
   text-align: center;
   padding: 15px 10px;
   font-size: 14px;

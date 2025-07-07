@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './GuestLanding.css';
-import logo from '../assets/images/wedding_logo_fefae0.svg';
+import logo from '../assets/images/wedding_logo_d7cbbc.svg';
 
 const GuestLanding = () => {
   const [guestName, setGuestName] = useState('');

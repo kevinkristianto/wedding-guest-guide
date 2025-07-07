@@ -1,7 +1,13 @@
 import React from 'react';
 import './MenuDisplay.css';
 
-const MenuDisplay = ({ menuType, appetiser, mainCourse, steakCook, allergies }) => {
+const MenuDisplay = ({
+  menuType,
+  appetiser,
+  mainCourse,
+  steakCook,
+  allergies,
+}) => {
   const renderMenu = () => {
     if (mainCourse === 'Grilled Ribeye' || mainCourse === 'Salmon al Forno') {
       return (

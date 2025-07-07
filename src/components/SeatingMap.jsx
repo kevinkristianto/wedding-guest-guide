@@ -123,7 +123,7 @@ const SeatingMap = ({ guestToken }) => {
             ? {
                 backgroundColor: '#ffcc00',
                 color: '#000',
-                border: el.type === 'chair' ? '2px solid #550000' : 'none',
+                border: el.type === 'chair' ? '2px solid #200000' : 'none',
               }
             : {};
 

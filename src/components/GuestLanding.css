@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #fefae0;
+  background-color: #d7cbbc;
   color: #606c38;
 }
 
@@ -17,13 +17,13 @@ body {
 
 .guest-header h1 {
   font-size: 2rem;
-  color: #fefae0;
+  color: #d7cbbc;
   margin-bottom: 10px;
 }
 
 .guest-header p {
   font-size: 1.2rem;
-  color: #fefae0;
+  color: #d7cbbc;
 }
 
 .guest-container {
@@ -31,12 +31,12 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #550000;
+  background-color: #200000;
   border-radius: 12px;
   padding: 30px;
   width: 90%;
   max-width: 400px;
-  color: #fefae0;
+  color: #d7cbbc;
 }
 
 .guest-form {
@@ -49,31 +49,31 @@ body {
 .guest-label {
   font-size: 18px;
   margin-bottom: 7px;
-  color: #fefae0;
+  color: #d7cbbc;
   text-align: left;
   width: 100%;
 }
 
 .guest-button {
   margin-top: 15px;
-  background-color: #910000;
+  background-color: #d7cbbc;
   border: none;
   padding: 12px 20px;
   border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: #fefae0;
+  color: #200000;
   cursor: pointer;
   width: 100%;
   transition: background-color 0.3s ease;
 }
 
 .guest-button:hover {
-  background-color: #bc6c25;
+  background-color: #d7cbbc;
 }
 
 .guest-error {
-  color: #bc6c25;
+  color: #998d81;
   margin-top: 10px;
   font-weight: bold;
 }
@@ -89,7 +89,7 @@ body {
   font-size: 16px;
   border-radius: 6px;
   margin-top: 15px;
-  border: 1px solid #606c38;
+  border: 1px solid #d7cbbc;
   box-sizing: border-box;
 }
 
@@ -101,8 +101,8 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
-  background-color: #fefae0;
-  border: 1px solid #550000;
+  background-color: #fefefe;
+  border: 1px solid #200000;
   border-radius: 6px;
   max-height: 150px;
   overflow-y: auto;
@@ -113,12 +113,12 @@ body {
 .suggestions li {
   padding: 10px;
   font-size: 16px;
-  color: #550000;
+  color: #200000;
   cursor: pointer;
 }
 
 .suggestions li:hover {
-  background-color: #ffcdcd;
+  background-color: #d7cbbc;
   color: #283618;
 }
 
