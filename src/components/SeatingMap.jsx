@@ -5,6 +5,7 @@ import './SeatingMap.css';
 
 const SeatingMap = ({ guestToken }) => {
   const [seatName, setSeatName] = useState('');
+  const [guestName, setGuestName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [elements, setElements] = useState([]);
@@ -24,6 +25,7 @@ const SeatingMap = ({ guestToken }) => {
           `${process.env.REACT_APP_BACKEND_URL}/api/guests/token/${guestToken}`
         );
         const guestName = guestRes.data.name;
+        setGuestName(guestName); // 👈 This is what you need to add
 
         const layoutName = 'kevin-cia-lobo';
 
@@ -107,7 +109,10 @@ const SeatingMap = ({ guestToken }) => {
   return (
     <div className="seating-map" ref={canvasWrapperRef}>
       <div className="seating-name-display">
-        <p>Your seat number is {seatName}</p>
+        <h3 className="seating-map-title">Hi {guestName},</h3>
+        <p className="seating-map-subtitle">
+          Your seat number is {seatName}
+        </p>
       </div>
       <CanvasWrapper
         initialTransform={canvasTransform}

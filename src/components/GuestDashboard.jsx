@@ -86,7 +86,7 @@ const GuestDashboard = () => {
         <p>
           If you have any questions, please contact one of the crew members.
         </p>
-        </footer>
+      </footer>
     </div>
   );
 };
