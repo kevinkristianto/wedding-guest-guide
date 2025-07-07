@@ -44,6 +44,7 @@ const GuestDashboard = () => {
       return (
         <MenuDisplay
           menuType={guestData?.menu === 'vegan' ? 'Vegan' : 'Standard'}
+          appetiser={guestData?.appetiser}
           mainCourse={guestData?.menu}
           steakCook={guestData?.steakCook}
           allergies={guestData?.allergies}

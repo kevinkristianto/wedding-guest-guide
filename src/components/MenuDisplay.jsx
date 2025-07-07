@@ -1,7 +1,7 @@
 import React from 'react';
 import './MenuDisplay.css';
 
-const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
+const MenuDisplay = ({ menuType, appetiser, mainCourse, steakCook, allergies }) => {
   const renderMenu = () => {
     if (mainCourse === 'Grilled Ribeye' || mainCourse === 'Salmon al Forno') {
       return (
@@ -10,10 +10,20 @@ const MenuDisplay = ({ menuType, mainCourse, steakCook, allergies }) => {
             <b>Amuse Bouche</b>
           </p>
           <p class="menu-description">Crab & Pearls</p>
+
           <p className="menu-name">
-            <b>Beef Carpaccio</b>
+            <b>
+              {appetiser === 'Chicken Roulade'
+                ? 'Chicken Roulade'
+                : 'Beef Carpaccio'}
+            </b>
           </p>
-          <p class="menu-description">Truffle aioli, Parmesan, Rockets</p>
+          <p className="menu-description">
+            {appetiser === 'Chicken Roulade'
+              ? 'Saffron Aioli, Microgreens, Orange Dressing'
+              : 'Truffle aioli, Parmesan, Rockets'}
+          </p>
+
           <p className="menu-name">
             <b>Spinach Ravioli</b>
           </p>

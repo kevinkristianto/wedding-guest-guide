@@ -110,9 +110,7 @@ const SeatingMap = ({ guestToken }) => {
     <div className="seating-map" ref={canvasWrapperRef}>
       <div className="seating-name-display">
         <h3 className="seating-map-title">Hi {guestName},</h3>
-        <p className="seating-map-subtitle">
-          Your seat number is {seatName}
-        </p>
+        <p className="seating-map-subtitle">Your seat number is {seatName}</p>
       </div>
       <CanvasWrapper
         initialTransform={canvasTransform}
