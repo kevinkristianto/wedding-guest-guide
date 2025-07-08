@@ -14,6 +14,9 @@ const GuestDashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Force scroll to top on mount
+    window.scrollTo(0, 0);
+
     const fetchGuestData = async () => {
       try {
         const res = await axios.get(
