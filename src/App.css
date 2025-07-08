@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@400;600;700&display=swap');
+
 .app-container {
   font-family: 'Poppins', sans-serif;
   padding: 20px;
@@ -9,4 +11,23 @@
   overflow: visible;
   min-height: 100vh;
   padding-bottom: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lora', serif;
+  background-color: #200000;
+  color: #d7cbbc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  color: #d7cbbc;
+}
+
+button, input, textarea, label, span, p, li {
+  font-family: 'Lora', serif;
 }

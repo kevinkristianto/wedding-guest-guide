@@ -13,26 +13,25 @@ const GuestDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Force scroll to top on mount
-    window.scrollTo(0, 0);
+useEffect(() => {
+  window.scrollTo(0, 0);
 
-    const fetchGuestData = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/guests/token/${guestToken}`
-        );
-        setGuestData(res.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Failed to fetch guest data:', err);
-        setError('Failed to load guest data. Please try again later.');
-        setLoading(false);
-      }
-    };
+  const fetchGuestData = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/guests/token/${guestToken}`
+      );
+      setGuestData(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to fetch guest data:', err);
+      setError('Failed to load guest data. Please try again later.');
+      setLoading(false);
+    }
+  };
 
-    fetchGuestData();
-  }, [guestToken]);
+  fetchGuestData();
+}, [guestToken]);
 
   const renderContent = () => {
     if (loading) {

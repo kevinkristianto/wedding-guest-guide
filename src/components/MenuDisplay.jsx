@@ -13,9 +13,8 @@ const MenuDisplay = ({
       return (
         <div className="menu-details">
           <p className="menu-name">
-            <b>Amuse Bouche</b>
+            <b>Amuse Bouche - <i>Crab & Pearls</i></b>
           </p>
-          <p class="menu-description">Crab & Pearls</p>
 
           <p className="menu-name">
             <b>
@@ -84,9 +83,8 @@ const MenuDisplay = ({
       return (
         <div className="menu-details">
           <p className="menu-name">
-            <b>Amuse Bouche</b>
+            <b>Amuse Bouche - <i>Wild Mushroom Tartlet</i></b>
           </p>
-          <p class="menu-description">Wild Mushroom Tartlet</p>
           <p class="menu-description">Shimeji, Morels, Oyster Mushroom</p>
           <p className="menu-name">
             <b>Panzanella</b>
@@ -147,7 +145,7 @@ const MenuDisplay = ({
         {allergies.length > 0 ? (
           <p className="allergy-list">{allergies.join(', ')}</p>
         ) : (
-          <p className="no-allergy-note">No allergies confirmed.</p>
+          <p className="no-allergy-note">No allergies confirmed</p>
         )}
         <p className="allergy-note">
           <i>
