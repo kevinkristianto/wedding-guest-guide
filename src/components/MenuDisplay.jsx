@@ -13,7 +13,9 @@ const MenuDisplay = ({
       return (
         <div className="menu-details">
           <p className="menu-name">
-            <b>Amuse Bouche - <i>Crab & Pearls</i></b>
+            <b>
+              Amuse Bouche - <i>Crab & Pearls</i>
+            </b>
           </p>
 
           <p className="menu-name">
@@ -83,7 +85,9 @@ const MenuDisplay = ({
       return (
         <div className="menu-details">
           <p className="menu-name">
-            <b>Amuse Bouche - <i>Wild Mushroom Tartlet</i></b>
+            <b>
+              Amuse Bouche - <i>Wild Mushroom Tartlet</i>
+            </b>
           </p>
           <p class="menu-description">Shimeji, Morels, Oyster Mushroom</p>
           <p className="menu-name">
