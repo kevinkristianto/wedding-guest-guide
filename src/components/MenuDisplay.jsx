@@ -78,61 +78,42 @@ const MenuDisplay = ({
           </p>
         </div>
       );
-    } else if (
-      mainCourse === 'Aubergine Schnitzels' ||
-      mainCourse === 'Roasted Cauliflower'
-    ) {
+    } else if (mainCourse === 'Aubergine Schnitzels') {
       return (
         <div className="menu-details">
           <p className="menu-name">
             <b>
-              Amuse Bouche - <i>Wild Mushroom Tartlet</i>
+              Amuse Bouche - <i>Wild Mushroom Bruschetta</i>
             </b>
           </p>
           <p class="menu-description">Shimeji, Morels, Oyster Mushroom</p>
           <p className="menu-name">
-            <b>Panzanella</b>
+            <b>Tuscan Panzanella Salad</b>
           </p>
           <p class="menu-description">
-            Cherry Tomato, Cucumber, Ciabatta, Aged Balsamic
+            Cherry Tomato, Cucumber, Sourdough, Aged Balsamic
           </p>
           <p className="menu-name">
             <b>Gnocchi Pesto</b>
           </p>
-          <p class="menu-description">Potato, Pine nuts, Basil Pesto</p>
+          <p class="menu-description">Tomato, Basil Pesto, Pomodoro Sauce</p>
           <p className="menu-name">
             <b>Lime Granite</b>
           </p>
-          {mainCourse ? (
-            <>
-              <p className="menu-name">
-                <b>{mainCourse}</b>
-              </p>
-
-              <p className="menu-description">
-                <em>
-                  {{
-                    'Aubergine Schnitzels':
-                      'Corn Flakes, Sweet Potato Mashed, Romesco Sauce',
-                    'Roasted Cauliflower':
-                      'Cauliflower, Potato Pave, Honey Glazed Carrots, Chimmichurri',
-                  }[mainCourse] || 'No main course has been selected'}
-                </em>
-              </p>
-            </>
-          ) : (
-            <p className="menu-name">
-              <b>No main course has been selected</b>
-            </p>
-          )}
+          <p className="menu-name">
+            <b>Aubergine Schnitzels</b>
+          </p>
+          <p class="menu-description">
+            Sweet Potato Mashed, Tomato Cherry, Asparagus, Romesco Sauce
+          </p>
           <p className="dessert-section">
             <b>Dessert</b>
           </p>
           <p className="dessert-name">
-            <b>Tiramisu al Pistachio</b>
+            <b>Vegan Chocolate Mousse Cake</b>
           </p>
           <p class="menu-description">
-            Burnt Chocolate, Raspberry coulies, Salted Caramel Tuile
+            Mixed Berry Sauce, Green Tea Chocolate Soil
           </p>
         </div>
       );
